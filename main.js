@@ -1,10 +1,10 @@
-import fs from 'fs';
-import path from 'path';
-import OpenAI from "openai";
-import matter from 'gray-matter';
+import fs from 'fs'
+import path from 'path'
+import OpenAI from 'openai'
+import matter from 'gray-matter'
 
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 const folderPath = './content';
 
 
@@ -37,19 +37,19 @@ async function processFiles() {
 
         const messages = [
           {
-            role: "user",
+            role: 'user',
             content: `I have the following post article:\n${mainContent}`,
           },
           {
-            role: "user",
+            role: 'user',
             content: `In the above article we have the following description meta tag: "${params.description}"`,
           },
           {
-            role: "user",
+            role: 'user',
             content: `In the above article we have the following meta keywords: "${params.meta_tags}"`,
           },
           {
-            role: "user",
+            role: 'user',
             content: "Give me a better meta description and keywords",
           }
         ]
