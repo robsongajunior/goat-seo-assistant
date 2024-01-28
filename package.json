@@ -22,7 +22,7 @@
   "engines": {
     "node": ">=20.8.1"
   },
-  "author": "Robson Junior <robson.ga.junior@gmail.com> (https://www.robsonjunior.cc/)",
+  "author": "Robson Junior <robson.ga.junior@gmail.com> (https://www.robsonjunior.dev/)",
   "license": "MIT",
   "dependencies": {
     "gray-matter": "^4.0.3",
