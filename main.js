@@ -57,11 +57,13 @@ async function processFiles() {
           }
         ];
 
-
-        let data = {};
-        const suggestion = await openapiSuggestion({ model: 'gpt-3.5-turbo', messages: messages });
+        const suggestion = await openapiSuggestion({
+          model: 'gpt-3.5-turbo',
+          messages: messages
+        });
         const contentJson = JSON.parse(suggestion.message.content);
 
+        let data = {};
         data.suggest = contentJson;
         data.filePath = filePath;
 
