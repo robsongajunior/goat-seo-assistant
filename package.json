@@ -1,0 +1,31 @@
+{
+  "name": "goat-seo-assistant",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "man": "./README.md",
+  "main": "./main.js",
+  "bin": {
+    "goat-seo-assistant": "./main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robsongajunior/goat-seo-assistant"
+  },
+  "bugs": {
+    "url": "https://github.com/robsongajunior/goat-seo-assistant/issues",
+    "email": "robson.ga.junior@gmail.com"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=20.8.1"
+  },
+  "author": "Robson Junior <robson.ga.junior@gmail.com> (https://www.robsonjunior.cc/)",
+  "license": "MIT",
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "openai": "^4.26.0"
+  }
+}

@@ -1,0 +1,64 @@
+---
+layout: post
+title: Intelligent DNS contando com rede anycast
+date: 2020-08-11T17:54:03.000+00:00
+img_post: "/static/images/uploads/intelligent-dns-even-better-availability-performance-and-security-1.png"
+img_featured: "/static/images/uploads/intelligent-dns-even-better-availability-performance-and-security.png"
+img_featured_m: "/static/images/blog/intelligent-dns/featured-img.png"
+authors:
+- _authors/henrique-santos.md
+categories:
+- routing
+excerpt: Os produtos da Azion são construídos com arquitetura distribuída e redundante
+  em diversas camadas, e estamos em constante busca para melhorar a disponibilidade,
+  performance e segurança dos nossos produtos e serviços. O Intelligent DNS tem uma
+  infraestrutura global e uma rede anycast, ou seja, as consultas realizadas para
+  a resolução do DNS são roteadas para a região do globo e ponto de presença mais
+  próximos ao usuário.'
+description: Conheça o funcionamento da nossa a infraestrutura global e rede anycast
+  do Intelligent DNS.
+meta_tags: Anycast, Rede Anycast
+resourceHub:
+    enable: false
+    title_resourcehub:
+        type: auto
+        manual:
+    description_resourcehub:
+        type:
+        manual:
+    button:
+        buttonType:
+        url:
+    image:
+        enableImage: false
+        useOgImage: false
+        thumb:
+    flags:
+        contentType: Blog 
+permalink: "/blog/intelligent-dns-better-availability-security/"
+permalink_pt-br: "/blog/intelligent-dns-mais-disponibilidade-seguranca/"
+permalink_es: ''
+namespace: blogpost_intelligent_dns_better_availability_security
+
+---
+Os produtos da Azion são construídos com arquitetura distribuída e redundante em diversas camadas, e estamos em constante busca para melhorar a disponibilidade, performance e segurança dos nossos produtos e serviços.
+
+O Intelligent DNS tem uma infraestrutura global e uma rede anycast, ou seja, as consultas realizadas para a resolução do DNS são roteadas para a região do globo e ponto de presença mais próximos ao usuário.
+
+## O que muda?
+
+Como trabalhamos em diversos segmentos de mercado, os picos de acesso são imprevisíveis, portanto, optamos por manter nossas infraestruturas com muita capacidade e redundância, pois em cada ponto de presença os servidores são redundantes.
+
+Ao disponibilizarmos sempre dois domínios distintos – ns1.aziondns.net e ns2.aziondns.com – para mitigar até mesmo falhas em Root Servers DNS externos, que fazem parte do processo de resolução de domínios, já ofertávamos a redundância, disponibilidade, performance e segurança necessárias para as suas aplicações.
+
+Como estamos estendendo a nossa rede _Anycast_, acrescentando o domínio **ns3.aziondns.org**, passamos a ter mais redundância na nossa camada de resolução de consultas DNS, impactando positivamente na disponibilidade das suas aplicações hospedadas com a Azion.
+
+## O que devo fazer?
+
+Para que suas zonas hospedadas com a Azion passem a responder por mais este _Name Server_ disponibilizado, você deve efetuar o apontamento no seu DNS de registro (_registro.br, GoDaddy, AWS Registrar, etc._).
+
+É importante verificar se todos os seus registros estão devidamente cadastrados e testados no Intelligent DNS antes de efetuar os apontamentos. Caso contrário, você correrá o risco de ter indisponibilidade do seu serviço.
+
+A Azion recomenda a utilização de todos os _Name Servers_ disponíveis, pois isso garante a segurança, disponibilidade e performance das aplicações hospedadas conosco.
+
+Para saber mais sobre o Intelligent DNS, consulte nossa [Documentação](https://www.azion.com/pt-br/documentacao/produtos/intelligent-dns/) e API ou [abra um ticket](https://tickets.azion.com/).
