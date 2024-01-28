@@ -53,12 +53,24 @@ async function processFiles() {
           },
           {
             role: 'user',
-            content: 'Give me a better meta description and keywords',
+            content: 'Extract and give me the better meta description with total 160 chars and meta keywords from text using a json format with the respects attributes.',
           }
         ];
 
+
+        let data = {};
         const suggestion = await openapiSuggestion({ model: 'gpt-3.5-turbo', messages: messages });
-        console.log(suggestion);
+        const contentJson = JSON.parse(suggestion.message.content);
+
+        data.suggest = contentJson;
+        data.filePath = filePath;
+
+        data.current = {
+          metaDescription: params.description,
+          metaTags: params.meta_tags
+        };
+
+        console.log(data);
       }
     }
   })
