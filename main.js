@@ -53,11 +53,11 @@ async function processFiles() {
           },
           {
             role: 'user',
-            content: "Give me a better meta description and keywords",
+            content: 'Give me a better meta description and keywords',
           }
         ];
 
-        const suggestion = await openapiSuggestion({ model: "gpt-3.5-turbo", messages: messages });
+        const suggestion = await openapiSuggestion({ model: 'gpt-3.5-turbo', messages: messages });
         console.log(suggestion);
       }
     }
