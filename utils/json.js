@@ -1,7 +1,9 @@
 import fs from 'fs';
 
-function writeJsonToFile(jsonObj, filePath) {
+
+function jsonToFile(jsonObj, filePath) {
   const jsonString = JSON.stringify(jsonObj, null, 2);
+
   fs.writeFile(filePath, jsonString, 'utf8', (err) => {
     if (err) {
       console.error('An error occurred while writing JSON to file:', err);
@@ -11,6 +13,5 @@ function writeJsonToFile(jsonObj, filePath) {
   });
 };
 
-export default {
-  jsonToFile: writeJsonToFile
-};
+
+export default { toFile: jsonToFile };

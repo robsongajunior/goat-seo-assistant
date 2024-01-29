@@ -77,7 +77,7 @@ async function processFiles() {
           metaTags: params.meta_tags
         };
 
-        await json.jsonToFile(data, 'result-test.json');
+        await json.toFile(data, 'result-test.json');
       }
     }
   })
