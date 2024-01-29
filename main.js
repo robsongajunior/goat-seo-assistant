@@ -26,6 +26,20 @@ async function openapiSuggestion({model, messages}) {
   return completion.choices[0];
 };
 
+function writeJsonToFile(jsonObj, filePath) {
+  // Convert JSON object to string
+  const jsonString = JSON.stringify(jsonObj, null, 2);
+
+  // Write the string to file
+  fs.writeFile(filePath, jsonString, 'utf8', (err) => {
+      if (err) {
+          console.error("An error occurred while writing JSON to file:", err);
+      } else {
+          console.log("JSON has been written successfully to", filePath);
+      }
+  });
+}
+
 async function processFiles() {
   fs.readdir(folderPath, { withFileTypes: true }, async (err, entries) => {
     if (err) {
@@ -53,7 +67,7 @@ async function processFiles() {
           },
           {
             role: 'user',
-            content: 'Extract and give me the better meta description with total 160 chars and meta keywords from text using a json format with the respects attributes.',
+            content: 'Extract and give me the better meta description with total 160 chars and the maximum meta keywords but the minimun tree from text using a json format with the respects attributes.',
           }
         ];
 
@@ -71,6 +85,8 @@ async function processFiles() {
           metaDescription: params.description,
           metaTags: params.meta_tags
         };
+
+        writeJsonToFile(data, 'result-test.json');
 
         console.log(data);
       }
