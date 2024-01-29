@@ -4,7 +4,7 @@
   <img src="doc/img/goat-logo.png" width="600px" />
 </p>
 
-The IA Assistant to scale your process to define the special descriptions, meta tags and much more to launch your web page.
+The IA Assistant to scale your process to define the special `meta descriptions`, `meta tags` and `much more` to launch your web page.
 
 
 ## TO START
