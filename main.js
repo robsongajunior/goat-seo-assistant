@@ -27,10 +27,7 @@ async function openapiSuggestion({model, messages}) {
 };
 
 function writeJsonToFile(jsonObj, filePath) {
-  // Convert JSON object to string
   const jsonString = JSON.stringify(jsonObj, null, 2);
-
-  // Write the string to file
   fs.writeFile(filePath, jsonString, 'utf8', (err) => {
       if (err) {
           console.error("An error occurred while writing JSON to file:", err);
