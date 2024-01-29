@@ -21,19 +21,19 @@ async function extractFrontmatterAndContent(filePath) {
   };
 };
 
-async function openapiSuggestion({model, messages}) {
-  const completion = await openai.chat.completions.create({model, messages});
+async function openapiSuggestion({ model, messages }) {
+  const completion = await openai.chat.completions.create({ model, messages });
   return completion.choices[0];
 };
 
 function writeJsonToFile(jsonObj, filePath) {
   const jsonString = JSON.stringify(jsonObj, null, 2);
   fs.writeFile(filePath, jsonString, 'utf8', (err) => {
-      if (err) {
-          console.error("An error occurred while writing JSON to file:", err);
-      } else {
-          console.log("JSON has been written successfully to", filePath);
-      }
+    if (err) {
+      console.error('An error occurred while writing JSON to file:', err);
+    } else {
+      console.log('JSON has been written successfully to', filePath);
+    }
   });
 };
 
