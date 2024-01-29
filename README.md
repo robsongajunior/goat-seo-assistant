@@ -1,7 +1,7 @@
 <h1 align="center">goat_seo_assistant</h1>
 
 <p align="center">
-    <img src="doc/img/goat-logo.png" width="600px" />
+  <img src="doc/img/goat-logo.png" width="600px" />
 </p>
 
 The IA Assistant to scale your process to define the special descriptions, meta tags and much more to launch your web page.
