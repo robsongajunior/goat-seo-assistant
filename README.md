@@ -6,6 +6,7 @@
 
 The IA Assistant to scale your process to define the special descriptions, meta tags and much more to launch your web page.
 
+
 ## TO START
 
 To start we need a basic congiguration to set the Open API api key.
