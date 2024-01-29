@@ -38,7 +38,7 @@ function writeJsonToFile(jsonObj, filePath) {
           console.log("JSON has been written successfully to", filePath);
       }
   });
-}
+};
 
 async function processFiles() {
   fs.readdir(folderPath, { withFileTypes: true }, async (err, entries) => {
