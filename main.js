@@ -1,40 +1,34 @@
 import fs from 'fs';
 import path from 'path';
 import OpenAI from 'openai';
-import matter from 'gray-matter';
+
+
+////////////////////
+// LOCAL IMPORTS //
+//////////////////
+
+
+import frontMatter from './utils/front-matter.js';
+import json from './utils/json.js';
+
+
+//////////////////////////
+// GLOBAL CONFIGURATION //
+//////////////////////////
 
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const folderPath = './content';
 
 
-async function extractFrontmatterAndContent(filePath) {
-  const fileContent = fs.readFileSync(filePath, 'utf-8');
-  const {
-    data: params,
-    content: mainContent
-  } = matter(fileContent);
+////////////
+// METHOS //
+////////////
 
-  return {
-    params,
-    mainContent: mainContent.trim()
-  };
-};
 
 async function openapiSuggestion({ model, messages }) {
   const completion = await openai.chat.completions.create({ model, messages });
   return completion.choices[0];
-};
-
-function writeJsonToFile(jsonObj, filePath) {
-  const jsonString = JSON.stringify(jsonObj, null, 2);
-  fs.writeFile(filePath, jsonString, 'utf8', (err) => {
-    if (err) {
-      console.error('An error occurred while writing JSON to file:', err);
-    } else {
-      console.log('JSON has been written successfully to', filePath);
-    }
-  });
 };
 
 async function processFiles() {
@@ -47,7 +41,7 @@ async function processFiles() {
     for (const entry of entries) {
       if (entry.isFile() && (entry.name.endsWith('.md') || entry.name.endsWith('.mdx'))) {
         const filePath = path.join(folderPath, entry.name);
-        const { params, mainContent } = await extractFrontmatterAndContent(filePath);
+        const { params, mainContent } = await frontMatter.extractData(filePath);
 
         const messages = [
           {
@@ -83,9 +77,7 @@ async function processFiles() {
           metaTags: params.meta_tags
         };
 
-        writeJsonToFile(data, 'result-test.json');
-
-        console.log(data);
+        await json.jsonToFile(data, 'result-test.json');
       }
     }
   })
