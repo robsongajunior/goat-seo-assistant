@@ -1,37 +1,52 @@
 #!/usr/bin/env node
 
-
 import fs from 'fs';
 import path from 'path';
 import OpenAI from 'openai';
 
-
-////////////////////
-// LOCAL IMPORTS //
-//////////////////
-
-
 import frontMatter from './utils/front-matter.js';
 import json from './utils/json.js';
+import promptKeyworkDescription from './prompts/azion-seo-meta-keywords-description.js';
 
-
-//////////////////////////
-// GLOBAL CONFIGURATION //
-//////////////////////////
-
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const folderPath = './content';
-
-
-////////////
-// METHOS //
-////////////
-
+const lang = 'pt-br';
+const folderPath = `/Users/robson.junior/dev/docs/src/content/docs/${lang}/pages`;
+const distPath = `./dist/docs/${lang}/round/01/pages/`;
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 async function openapiSuggestion({ model, messages }) {
-  const completion = await openai.chat.completions.create({ model, messages });
+  const completion = await client.chat.completions.create({ model, messages });
   return completion.choices[0];
+};
+
+function checkPathType(path) {
+  fs.stat(path, (err, stats) => {
+    if (err) {
+      if (err.code === 'ENOENT') {
+        console.error('Path does not exist:', path);
+      } else {
+        console.error('Error accessing path:', err);
+      }
+
+      return;
+    }
+
+    if (stats.isFile()) {
+      console.log(path, 'is a file');
+    } else if (stats.isDirectory()) {
+      console.log(path, 'is a directory');
+    } else {
+      console.log(path, 'is neither a file nor a directory'); // e.g., symbolic link
+    }
+  });
+}
+
+function recursiveProcessFile(entries) {
+  // console.log(entries);
+
+  entries.map(entry => {
+    let p = `${entry.path}/${entry.name}`;
+    checkPathType(p);
+  });
 };
 
 async function processFiles() {
@@ -41,55 +56,49 @@ async function processFiles() {
       return;
     }
 
+    recursiveProcessFile(entries);
+
+    let i = 0;
     for (const entry of entries) {
-      if (entry.isFile() && (entry.name.endsWith('.md') || entry.name.endsWith('.mdx'))) {
+      if (
+        entry.isFile() &&
+        (entry.name.endsWith('.md') || entry.name.endsWith('.mdx'))
+      ) {
+        i++;
+
         const filePath = path.join(folderPath, entry.name);
         const { params, mainContent } = await frontMatter.extractData(filePath);
 
-        const messages = [
-          {
-            role: 'user',
-            content: `I have the following post article:\n${mainContent}`,
-          },
-          {
-            role: 'user',
-            content: `In the above article we have the following description meta tag: "${params.description}"`,
-          },
-          {
-            role: 'user',
-            content: `In the above article we have the following meta keywords: "${params.meta_tags}"`,
-          },
-          {
-            role: 'user',
-            content: 'Extract and give me the better meta description with total 160 chars and the maximum meta keywords but the minimun tree from text using a json format with the respects attributes.',
-          }
-        ];
+        console.log('');
+        console.log(`[REQUEST]: meta_tags: ${params.meta_tags}`);
+        console.log(`[REQUEST]: meta_description: ${params.description}`);
 
+        const messages = promptKeyworkDescription(params, mainContent)
         const suggestion = await openapiSuggestion({
-          model: 'gpt-3.5-turbo',
-          messages: messages
+          messages: messages,
+          model: "gpt-4-turbo",
+          response_format: {
+            type: "json_object"
+          }
         });
-        const contentJson = JSON.parse(suggestion.message.content);
 
         let data = {};
-        data.suggest = contentJson;
         data.filePath = filePath;
+        data.url = `https://www.azion.com/${lang}/${lang === 'en' ? 'documentation' : 'documentacao'}${params.permalink}`;
 
-        data.current = {
-          metaDescription: params.description,
-          metaTags: params.meta_tags
-        };
+        data.suggest = JSON.parse(suggestion.message.content) || {};
+        data.suggest.meta_description_length = data.suggest.meta_description.length;
 
-        await json.toFile(data, 'result-test.json');
+        data.current = {};
+        data.current.meta_description = params.description;
+        data.current.meta_keywords = params.meta_tags;
+
+        console.log(`[RESPONSE]: ${JSON.stringify(data.suggest)}`);
+
+        await json.toFile(data, `${distPath}/${entry.name}.json`);
       }
     }
   })
 };
-
-
-//////////
-// INIT //
-//////////
-
 
 processFiles();
