@@ -4,7 +4,6 @@ import fs from 'fs';
 import path from 'path';
 
 
-
 /////////////
 // CONFIG //
 ///////////
@@ -55,7 +54,7 @@ async function processDirectory(directory) {
       return;
     }
 
-    entries.map(async (entry) => {
+    for (const entry of entries) {
       const fullPath = path.join(directory, entry.name);
 
       if (entry.isDirectory()) {
@@ -78,11 +77,14 @@ async function processDirectory(directory) {
         const messages = promptKeyworkDescription(params, markdownContent);
         const suggestion = await openia.getSuggestion(messages);
         const data = json.serializeDelivery(fullPath, params, suggestion);
+        const dist = `${config.output}${directory.replace(config.input, '')}`;
 
-        mkdir(config.output);
-        touchFileResult(data, `${config.output}/${entry.name}.json`);
+        console.log(dist);
+
+        mkdir(dist);
+        touchFileResult(data, `${dist}/${entry.name}.json`);
       }
-    });
+    };
   });
 }
 

@@ -1,6 +1,6 @@
 export default {
   input: '/Users/robson.junior/dev/site/src/content/products',
-  output: '/Users/robson.junior/dev/site/goat-seo-assistant-results/products',
+  output: '/Users/robson.junior/dev/site/.goat-seo-assistant/products',
   file: {
     type: 'json',
     update: false,
