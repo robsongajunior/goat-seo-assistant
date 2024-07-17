@@ -16,7 +16,7 @@ import config from './config.js';
 // SERVICES //
 //////////////
 
-import openia from './services/openia.js'
+import openia from './services/openia.js';
 
 
 ////////////
@@ -55,7 +55,7 @@ async function processDirectory(directory) {
       return;
     }
 
-    for (const entry of entries) {
+    entries.map(async (entry) => {
       const fullPath = path.join(directory, entry.name);
 
       if (entry.isDirectory()) {
@@ -69,7 +69,7 @@ async function processDirectory(directory) {
         mkdir(config.output);
         touchFileResult(data, `${config.output}/${entry.name}.json`);
       }
-    }
+    });
   });
 }
 
