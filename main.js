@@ -70,8 +70,8 @@ async function processDirectory(directory) {
       } else if (config.file.type === 'json' && json.isFile(entry)) {
         const jsonContent = json.read(fullPath);
         const params = {
-          meta_tags: jsonContent.meta_tags,
-          description: jsonContent.description
+          description: jsonContent.description,
+          meta_tags: jsonContent.meta_tags
         };
         const markdownContent = json.toMarkdown(jsonContent);
         const messages = promptKeyworkDescription(params, markdownContent);
@@ -82,7 +82,7 @@ async function processDirectory(directory) {
         console.log(dist);
 
         mkdir(dist);
-        touchFileResult(data, `${dist}/${entry.name}.json`);
+        touchFileResult(data, `${dist}/${entry.name}`);
       }
     };
   });

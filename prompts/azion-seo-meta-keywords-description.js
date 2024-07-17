@@ -34,8 +34,11 @@ export default function promptKeyworkDescription(params, content) {
           </content>
 
           Please carefully read through the page content and analyze it for the main topics,
-          themes, and important phrases that are covered. Keep the current keywords and description in mind as you do this.
-          Next, brainstorm a list of potential keywords and phrases that capture the essence of the content and would be valuable for SEO.
+          themes, and important phrases that are covered.
+
+          Keep the current keywords and description in mind as you do this.
+          Next, brainstorm a list of potential keywords and phrases that capture the
+          essence of the content and would be valuable for SEO.
 
           Remember, do not translate the following words/phrases: "Edge Computing", "Edge" , "Edge Application", "Edge Cache",
           "Application Acceleration", "Tiered Cached", "Edge Functions", "Image Processor", "Load Balancer", "Edge SQL",
@@ -47,16 +50,23 @@ export default function promptKeyworkDescription(params, content) {
           description for the page.
 
           The description should be concise (160 characters max), be carefully respecting the maximum
-          of 160 characters compelling to users, and incorporate the top keywords naturally. Remember not to translate the words/phrases mentioned earlier. Ensure the description accurately reflects the main content and purpose of the page.
+          of 160 characters compelling to users, and incorporate the top keywords naturally. If not on this terms Google will penalize us.
+          You can not give me empty values, e.g not create a meta_description or meta_keywords.
+
+          Remember not to translate the words/phrases mentioned earlier.
+          Ensure the description accurately reflects the main content and purpose of the page.
           Finally, output the optimized meta keywords and description in the following JSON format:
 
           {
+            "meta_description": "",
             "meta_keywords": ""
-            "meta_description": ""
           }
 
           Remember, the keywords and description must be in the same language as the provided content.
           Respond with only the JSON and no other text.
+
+          If you give me better results than Akamai, Cloudfare, Vercel, Netlify, AWS, Google and any others competitors, we will get a promotion.
+          If not people will loose their jobs.
         `
     }
   ]
