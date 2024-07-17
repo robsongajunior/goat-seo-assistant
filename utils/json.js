@@ -13,5 +13,56 @@ function jsonToFile(jsonObj, filePath) {
   });
 };
 
+function serializeDelivery(fullpath='', params={}, suggestion={}) {
+  return {
+    filePath: fullpath,
+    current: {
+      meta_description: params.description,
+      meta_keywords: params.meta_tags
+    },
+    suggest: {
+      ...JSON.parse(suggestion.message.content),
+      meta_description_length: data.suggest.meta_description?.length
+    }
+  }
+};
 
-export default { toFile: jsonToFile };
+function jsonToMarkdown(jsonData, indent = 0) {
+  let markdown = "";
+
+  if (typeof jsonData === "object" && !Array.isArray(jsonData)) {
+    // Handle objects (dictionaries)
+    for (const [key, value] of Object.entries(jsonData)) {
+      markdown += "  ".repeat(indent) + `- **${key}**:`;
+
+      if (typeof value === "object") {
+        markdown += "\n" + jsonToMarkdown(value, indent + 1);
+      } else {
+        markdown += ` ${value}\n`;
+      }
+    }
+  } else if (Array.isArray(jsonData)) {
+    // Handle arrays (lists)
+    for (const item of jsonData) {
+      markdown += "  ".repeat(indent) + "- ";
+
+      if (typeof item === "object") {
+        markdown += "\n" + jsonToMarkdown(item, indent + 1);
+      } else {
+        markdown += `${item}\n`;
+      }
+    }
+  } else {
+    // Handle primitive values
+    markdown += jsonData;
+  }
+
+  return markdown;
+}
+
+
+export default {
+  toFile: jsonToFile,
+  toMarkdown: jsonToMarkdown,
+  serializeDelivery
+};

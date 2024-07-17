@@ -4,17 +4,46 @@ import fs from 'fs';
 import path from 'path';
 import OpenAI from 'openai';
 
+
+/////////////
+// CONFIG //
+///////////
+
 import config from './config.js';
-import frontMatter from './utils/front-matter.js';
+
+
+////////////
+// UTILS //
+//////////
+
+import markdown from './utils/markdown.js';
 import json from './utils/json.js';
+
+
+//////////////
+// PROMPTS //
+////////////
+
 import promptKeyworkDescription from './prompts/azion-seo-meta-keywords-description.js';
 
+
+///////////////////////
+// CLIENT - OPEN IA //
+/////////////////////
+
+// in the terminal exec the command to export the the OPENAI_API_KEY variable
+// export OPENAI_API_KEY="[openia_apikey]"
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 async function openapiSuggestion({ model, messages, response_format }) {
   const completion = await client.chat.completions.create({ model, messages, response_format });
   return completion.choices[0];
 };
+
+
+////////////////
+// FUNCTIONS //
+///////////////
 
 async function processDirectory(directory) {
   fs.readdir(directory, { withFileTypes: true }, async (err, entries) => {
@@ -29,11 +58,7 @@ async function processDirectory(directory) {
       if (entry.isDirectory()) {
         await processDirectory(fullPath);
       } else if (entry.isFile() && (entry.name.endsWith('.md') || entry.name.endsWith('.mdx'))) {
-        const { params, mainContent } = await frontMatter.extractData(fullPath);
-
-        console.log('\n[fullPath]: ', fullPath)
-        console.log(`[request]: meta_tags: ${params.meta_tags}`);
-        console.log(`[request]: meta_description: ${params.description}`);
+        const { params, mainContent } = await markdown.getFrontMatter(fullPath);
 
         const messages = promptKeyworkDescription(params, mainContent);
         const suggestion = await openapiSuggestion({
@@ -44,18 +69,7 @@ async function processDirectory(directory) {
           }
         });
 
-        let data = {};
-        data.filePath = fullPath;
-        // data.url = `https://www.azion.com/[lang]//${params.permalink}`;
-
-        data.suggest = JSON.parse(suggestion.message.content) || {};
-        data.suggest.meta_description_length = data.suggest.meta_description?.length;
-
-        data.current = {};
-        data.current.meta_description = params.description;
-        data.current.meta_keywords = params.meta_tags;
-
-        console.log(`\n[response]: ${JSON.stringify(data.suggest)}`);
+        const data = json.serializeDelivery(fullPath, params, suggestion);
 
         if (!fs.existsSync(config.output)) {
           fs.mkdirSync(config.output, { recursive: true });
@@ -70,5 +84,10 @@ async function processDirectory(directory) {
 async function processFiles() {
   await processDirectory(config.input);
 };
+
+
+///////////////////////
+// PLAY IN THE GAME //
+/////////////////////
 
 await processFiles();
