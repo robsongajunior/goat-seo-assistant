@@ -2,7 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import OpenAI from 'openai';
+
 
 
 /////////////
@@ -10,6 +10,13 @@ import OpenAI from 'openai';
 ///////////
 
 import config from './config.js';
+
+
+///////////////
+// SERVICES //
+//////////////
+
+import openia from './services/openia.js'
 
 
 ////////////
@@ -27,23 +34,19 @@ import json from './utils/json.js';
 import promptKeyworkDescription from './prompts/azion-seo-meta-keywords-description.js';
 
 
-///////////////////////
-// CLIENT - OPEN IA //
-/////////////////////
-
-// in the terminal exec the command to export the the OPENAI_API_KEY variable
-// export OPENAI_API_KEY="[openia_apikey]"
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-async function openapiSuggestion({ model, messages, response_format }) {
-  const completion = await client.chat.completions.create({ model, messages, response_format });
-  return completion.choices[0];
-};
-
-
 ////////////////
 // FUNCTIONS //
 ///////////////
+
+function mkdir(folderPath) {
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath, { recursive: true });
+  }
+};
+
+async function touchFileResult(data, fileDist) {
+  await json.toFile(data, fileDist);
+};
 
 async function processDirectory(directory) {
   fs.readdir(directory, { withFileTypes: true }, async (err, entries) => {
@@ -57,25 +60,16 @@ async function processDirectory(directory) {
 
       if (entry.isDirectory()) {
         await processDirectory(fullPath);
-      } else if (entry.isFile() && (entry.name.endsWith('.md') || entry.name.endsWith('.mdx'))) {
+      } else if (markdown.isFile(entry)) {
         const { params, mainContent } = await markdown.getFrontMatter(fullPath);
-
         const messages = promptKeyworkDescription(params, mainContent);
-        const suggestion = await openapiSuggestion({
-          messages: messages,
-          model: "gpt-4-turbo",
-          response_format: {
-            type: "json_object"
-          }
-        });
-
+        const suggestion = await openia.getSuggestion(messages);
         const data = json.serializeDelivery(fullPath, params, suggestion);
 
-        if (!fs.existsSync(config.output)) {
-          fs.mkdirSync(config.output, { recursive: true });
-        }
+        console.log(`data: `, data);
 
-        await json.toFile(data, `${config.output}/${entry.name}.json`);
+        mkdir(config.output);
+        touchFileResult(data, `${config.output}/${entry.name}.json`);
       }
     }
   });

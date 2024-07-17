@@ -14,6 +14,8 @@ function jsonToFile(jsonObj, filePath) {
 };
 
 function serializeDelivery(fullpath='', params={}, suggestion={}) {
+  const json = JSON.parse(suggestion.message.content);
+
   return {
     filePath: fullpath,
     current: {
@@ -21,8 +23,9 @@ function serializeDelivery(fullpath='', params={}, suggestion={}) {
       meta_keywords: params.meta_tags
     },
     suggest: {
-      ...JSON.parse(suggestion.message.content),
-      meta_description_length: data.suggest.meta_description?.length
+      meta_keywords: json.meta_keywords,
+      meta_description: json.meta_description,
+      meta_description_length: json.meta_description?.length
     }
   }
 };
