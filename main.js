@@ -66,8 +66,6 @@ async function processDirectory(directory) {
         const suggestion = await openia.getSuggestion(messages);
         const data = json.serializeDelivery(fullPath, params, suggestion);
 
-        console.log(`data: `, data);
-
         mkdir(config.output);
         touchFileResult(data, `${config.output}/${entry.name}.json`);
       }
