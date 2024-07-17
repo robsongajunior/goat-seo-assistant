@@ -1,6 +1,17 @@
 import fs from 'fs';
 
 
+/**
+ *
+ * Used with entry from  fs.readdir
+ * fs.readdir(directory, { withFileTypes: true }, async (err, entries) => {}
+ *
+*/
+function isFile(entry) {
+  const is = entry.isFile() && (entry.name.endsWith('.json'));
+  return is;
+};
+
 function jsonToFile(jsonObj, filePath) {
   const jsonString = JSON.stringify(jsonObj, null, 2);
 
@@ -45,7 +56,6 @@ function jsonToMarkdown(jsonData, indent = 0) {
       }
     }
   } else if (Array.isArray(jsonData)) {
-    // Handle arrays (lists)
     for (const item of jsonData) {
       markdown += "  ".repeat(indent) + "- ";
 
@@ -56,16 +66,21 @@ function jsonToMarkdown(jsonData, indent = 0) {
       }
     }
   } else {
-    // Handle primitive values
     markdown += jsonData;
   }
 
   return markdown;
 }
 
+function read(filePath, type='json') {
+  const jsonStr = fs.readFileSync(filePath, 'utf-8');
+  return type === 'json' ? JSON.parse(jsonStr) : jsonStr;
+};
 
 export default {
   toFile: jsonToFile,
   toMarkdown: jsonToMarkdown,
-  serializeDelivery
+  serializeDelivery,
+  isFile,
+  read
 };

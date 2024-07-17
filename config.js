@@ -1,8 +1,8 @@
 export default {
-  input: '/Users/robson.junior/dev/site/src/content/cases',
-  output: '/Users/robson.junior/dev/site/goat-seo-assistant-results/cases',
+  input: '/Users/robson.junior/dev/site/src/content/products',
+  output: '/Users/robson.junior/dev/site/goat-seo-assistant-results/products',
   file: {
-    type: ['md', 'mdx'],
+    type: 'json',
     update: false,
     flag: true
   }

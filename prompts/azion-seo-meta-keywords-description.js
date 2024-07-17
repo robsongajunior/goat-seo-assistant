@@ -1,5 +1,5 @@
 
-export default function metatagKeywordAndDescription(params, content) {
+export default function promptKeyworkDescription(params, content) {
   return [
     {
       role: 'system',

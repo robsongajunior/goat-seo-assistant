@@ -60,9 +60,22 @@ async function processDirectory(directory) {
 
       if (entry.isDirectory()) {
         await processDirectory(fullPath);
-      } else if (markdown.isFile(entry)) {
+      } else if (config.file.type === 'markdown' && markdown.isFile(entry)) {
         const { params, mainContent } = await markdown.getFrontMatter(fullPath);
         const messages = promptKeyworkDescription(params, mainContent);
+        const suggestion = await openia.getSuggestion(messages);
+        const data = json.serializeDelivery(fullPath, params, suggestion);
+
+        mkdir(config.output);
+        touchFileResult(data, `${config.output}/${entry.name}.json`);
+      } else if (config.file.type === 'json' && json.isFile(entry)) {
+        const jsonContent = json.read(fullPath);
+        const params = {
+          meta_tags: jsonContent.meta_tags,
+          description: jsonContent.description
+        };
+        const markdownContent = json.toMarkdown(jsonContent);
+        const messages = promptKeyworkDescription(params, markdownContent);
         const suggestion = await openia.getSuggestion(messages);
         const data = json.serializeDelivery(fullPath, params, suggestion);
 

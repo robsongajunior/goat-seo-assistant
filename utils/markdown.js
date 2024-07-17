@@ -1,11 +1,7 @@
 import fs from 'fs';
 import matter from 'gray-matter';
 
-/**
- *
- *
- *
-*/
+
 async function getFrontMatter(filePath) {
   const fileContent = fs.readFileSync(filePath, 'utf-8');
   const { data:params, content:mainContent } = matter(fileContent);
@@ -21,12 +17,16 @@ async function getFrontMatter(filePath) {
 */
 function isFile(entry) {
   const is = entry.isFile() && (entry.name.endsWith('.md') || entry.name.endsWith('.mdx'))
-
   return is;
 };
 
+function read(filePath) {
+  const content = fs.readFileSync(filePath, 'utf-8');
+  return content;
+};
 
 export default {
   getFrontMatter,
-  isFile
+  isFile,
+  read
 };
