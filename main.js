@@ -47,6 +47,8 @@ async function touchFileResult(data, fileDist) {
   await json.toFile(data, fileDist);
 };
 
+
+
 async function processDirectory(directory) {
   fs.readdir(directory, { withFileTypes: true }, async (err, entries) => {
     if (err) {
@@ -68,18 +70,26 @@ async function processDirectory(directory) {
         mkdir(config.output);
         touchFileResult(data, `${config.output}/${entry.name}.json`);
       } else if (config.file.type === 'json' && json.isFile(entry)) {
-        const jsonContent = json.read(fullPath);
+        //
+        let jsonContentToMerge = {};
+        try {
+          const pathFormatted = fullPath.replace(/src\/content\/pages\/([^\/]+)/, 'src/i18n/$1/pages');
+          jsonContentToMerge = json.read(pathFormatted);
+        } catch(error) {
+          console.error(error);
+        }
+
+        const jsonContent = {...json.read(fullPath), ...jsonContentToMerge};
         const params = {
           description: jsonContent.description,
           meta_tags: jsonContent.meta_tags
         };
+
         const markdownContent = json.toMarkdown(jsonContent);
         const messages = promptKeyworkDescription(params, markdownContent);
         const suggestion = await openia.getSuggestion(messages);
         const data = json.serializeDelivery(fullPath, params, suggestion);
         const dist = `${config.output}${directory.replace(config.input, '')}`;
-
-        console.log(dist);
 
         mkdir(dist);
         touchFileResult(data, `${dist}/${entry.name}`);
